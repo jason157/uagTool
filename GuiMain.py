@@ -46,6 +46,9 @@ class GuiMain(tk.Tk):
 		# 最后再将菜单栏整个加到窗口 root
 		self.config(menu=self.menubar)
 
+		# 初始化 后显示帮助
+		self.__help_usage()
+
 	def __file_open(self):
 		self.textbox.delete('1.0', tk.END)  # 先删除所有
 		filename=tk.filedialog.askopenfilename()
@@ -86,11 +89,13 @@ class GuiMain(tk.Tk):
 	def __help_about(self):
 		messagebox.showinfo('关于', '作者：Jason \n verion 1.0 \n 感谢您的使用！ ')  # 弹出消息提示框
 	def __help_usage(self):
-		usageString='这是UAG日志分析的小程序\n' +\
-			'首先要在文件->打开中打开uag.log文件\n' +\
-			'如果检测到会议记录，就会分析并列出会议简要信息\n' +\
-			'选中对应会议的行后右键，就可以看到会议的详情\n' +\
-			'其他功能正在努力，请期待……\n'
+		usageString='使用帮助:\n这是UAG日志分析的小程序\n' +\
+		'首先要在文件->打开中打开uag.log文件(其他包含会议信息的文件也可以）\n' +\
+		'如果检测到会议记录，就会分析并列出会议简要信息\n' + \
+		'有如下两种操作：\n' + \
+		'1.选中对应会议的行后“单击”右键，就可以看到会议的详情\n' + \
+		'2.选中对应会议的行后“双机”右键，就可以保存当前会议的对应日志\n' + \
+		'其他功能正在努力，请期待……\n'
 		self.textbox.insert(tk.END, usageString + '\r\n')
 		#messagebox.showinfo('使用帮助',usageString)
 
