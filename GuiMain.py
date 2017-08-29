@@ -91,7 +91,9 @@ class GuiMain(tk.Tk):
 			'如果检测到会议记录，就会分析并列出会议简要信息\n' +\
 			'选中对应会议的行后右键，就可以看到会议的详情\n' +\
 			'其他功能正在努力，请期待……\n'
-		messagebox.showinfo('使用帮助',usageString)
+		self.textbox.insert(tk.END, usageString + '\r\n')
+		#messagebox.showinfo('使用帮助',usageString)
+
 
 	def getFilename(self):
 		return self.filename
@@ -203,7 +205,24 @@ class GuiMain(tk.Tk):
 		else:
 			pass
 	def mouseLeftDoubleClick(self,even=None):
-		messagebox.showwarning('警告', message='未选择文件！')  # 弹出消息提示框
+		#messagebox.showwarning('警告', message='左键单击测试！')  # 弹出消息提示框
+		linestring = self.textbox.get("current linestart", "current lineend+1c")
+		if "Time" and "UAGID" and "Number" in linestring:
+			saveFilename=tk.filedialog.asksaveasfilename()
+			if saveFilename:
+				fileSave = open(saveFilename, 'w', encoding="UTF8")
+				UAGID = getUAGIDfromConfList(linestring)
+				for line in self.filedata:
+					if UAGID in line:
+						fileSave.write(line)
+				fileSave.close()
+			else:
+				pass
+		else:
+			pass
+		if len(linestring) < 1:
+			pass
+
 
 	def mouseRightDoubleClick(self,even=None):
 		messagebox.showwarning('警告', message='未选择文件！')  # 弹出消息提示框
