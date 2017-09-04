@@ -89,12 +89,15 @@ class GuiMain(tk.Tk):
 	def __help_about(self):
 		messagebox.showinfo('关于', '作者：Jason \n verion 0.0.1 \n 感谢您的使用！ ')  # 弹出消息提示框
 	def __help_usage(self):
-		usageString='使用帮助:\n这是UAG日志分析的小程序\n' +\
+		usageString='使用帮助:\n一、这是UAG日志分析的小程序\n' +\
 		'首先要在文件->打开中打开uag.log文件(其他包含会议信息的文件也可以）\n' +\
 		'如果检测到会议记录，就会分析并列出会议简要信息\n' + \
 		'有如下两种操作：\n' + \
 		'1.选中对应会议的行后“单击”右键，就可以看到会议的详情\n' + \
 		'2.选中对应会议的行后“双机”右键，就可以保存当前会议的对应日志\n' + \
+		'\n二、功能中有一个OCS批量开户的功能，可用于OCS测试局\n打开的文件格式如下：\n'+\
+		'1.每个号码1行，11位数，不包含国家码\n'+\
+		'2.如果号码不规则或者不规范，可能带来意想不到的后果，请谨慎使用！！\n'
 		'其他功能正在努力，请期待……\n'
 		self.textbox.insert(tk.END, usageString + '\r\n')
 		#messagebox.showinfo('使用帮助',usageString)
@@ -278,7 +281,7 @@ class GuiMain(tk.Tk):
 			for num in numlist:
 				returncode = OpenAccountToOCS(num)
 				if int(returncode)==200:
-					self.textbox.insert("current linestart",num + "200 OK" +'\r\n')
+					self.textbox.insert("current linestart",num + ":200 OK,应该开成功了,哈哈" +'\r\n')
 				else:
 					self.textbox.insert("current linestart", num + ":出现错误了" + '\r\n')
 					pass
