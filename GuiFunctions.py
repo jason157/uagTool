@@ -2,6 +2,7 @@
 
 import BaseUagLog
 import json
+import BaseIAMFunction
 
 def openFile(fileName):
 	return BaseUagLog.loadLogFile(fileName)
@@ -23,3 +24,5 @@ def getConfLogbyUAGID():
 def getUAGIDfromConfList(string):
 	chaireman,UAGID=BaseUagLog.getChairmanNuagid(string)
 	return str(UAGID)
+def OpenAccountToOCS(numberlist):
+	return BaseIAMFunction.OCSOpenAccount(numberlist)

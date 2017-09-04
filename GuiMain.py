@@ -28,7 +28,7 @@ class GuiMain(tk.Tk):
 		# 创建“编辑”下拉菜单
 		## 也许用不到这几个菜单
 		editmenu = tk.Menu(self.menubar, tearoff=0)
-		#editmenu.add_command(label="会议分割", command=self.__edit_cut)
+		editmenu.add_command(label="OCS批量开户接口", command=self.OpenAccount2OCS)
 		#editmenu.add_command(label="导出选中会议", command=self.__edit_export)
 		#editmenu.add_command(label="撤销/返回", command=self.__edit_paste)
 
@@ -87,7 +87,7 @@ class GuiMain(tk.Tk):
 		pass
 
 	def __help_about(self):
-		messagebox.showinfo('关于', '作者：Jason \n verion 1.0 \n 感谢您的使用！ ')  # 弹出消息提示框
+		messagebox.showinfo('关于', '作者：Jason \n verion 0.0.1 \n 感谢您的使用！ ')  # 弹出消息提示框
 	def __help_usage(self):
 		usageString='使用帮助:\n这是UAG日志分析的小程序\n' +\
 		'首先要在文件->打开中打开uag.log文件(其他包含会议信息的文件也可以）\n' +\
@@ -258,3 +258,30 @@ class GuiMain(tk.Tk):
 	def _highlightline(self, event=None):
 		self.textbox.tag_remove("current_line", 1.0, "end")
 		self.textbox.tag_add("current_line", "current linestart", "current lineend+1c")
+
+	def OpenAccount2OCS(self):
+		self.textbox.delete('1.0', tk.END)  # 先删除所有
+		numlist=[]
+		filename=tk.filedialog.askopenfilename()
+		if os.path.isfile(filename):
+			self.filedata=openFile(filename)
+			for num in self.filedata:
+				num=num.strip('\n')
+				if num.isdigit():
+					numlist.append(num)
+					#self.textbox.insert(tk.END, num + '\r\n')
+					pureNumberFlag=True
+				else:
+					pureNumberFlag = False
+					self.textbox.insert("current linestart", num + ":号码错了" + '\r\n')
+			self.textbox.delete('1.0', tk.END)  # 先删除所有
+			for num in numlist:
+				returncode = OpenAccountToOCS(num)
+				if int(returncode)==200:
+					self.textbox.insert("current linestart",num + "200 OK" +'\r\n')
+				else:
+					self.textbox.insert("current linestart", num + ":出现错误了" + '\r\n')
+					pass
+		else:
+			messagebox.showinfo('打开', '没有选择文件')  # 消息提示框
+			pass
