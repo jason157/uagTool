@@ -6,6 +6,7 @@ from tkinter import ttk
 from tkinter import filedialog
 from tkinter import messagebox
 from GuiFunctions import *
+import uag_cdr
 
 class GuiMain(tk.Tk):
 	def __init__(self):
@@ -29,6 +30,10 @@ class GuiMain(tk.Tk):
 		## 也许用不到这几个菜单
 		editmenu = tk.Menu(self.menubar, tearoff=0)
 		editmenu.add_command(label="OCS批量开户接口", command=self.OpenAccount2OCS)
+		editmenu.add_command(label="29号话单解析", command=lambda :self.deal_cdr_29(29))
+		editmenu.add_command(label="30号话单解析", command=lambda :self.deal_cdr_29(30))
+		editmenu.add_command(label="35号话单解析", command=lambda :self.deal_cdr_29(35))
+		editmenu.add_command(label="36号话单解析", command=lambda :self.deal_cdr_29(36))
 		#editmenu.add_command(label="导出选中会议", command=self.__edit_export)
 		#editmenu.add_command(label="撤销/返回", command=self.__edit_paste)
 
@@ -95,9 +100,14 @@ class GuiMain(tk.Tk):
 		'有如下两种操作：\n' + \
 		'1.选中对应会议的行后“单击”右键，就可以看到会议的详情\n' + \
 		'2.选中对应会议的行后“双机”右键，就可以保存当前会议的对应日志\n' + \
-		'\n二、功能中有一个OCS批量开户的功能，可用于OCS测试局\n打开的文件格式如下：\n'+\
+		'\n二、功能中有一个OCS批量开户的功能，只能用于OCS测试局，需要放在跳板机上\n打开的文件格式如下：\n'+\
 		'1.每个号码1行，11位数，不包含国家码\n'+\
-		'2.如果号码不规则或者不规范，可能带来意想不到的后果，请谨慎使用！！\n'
+		'2.如果号码不规则或者不规范，可能带来意想不到的后果，请谨慎使用！！\n'+\
+		'\n三、话单解析功能，功能中包含了四类话单的解析功能\n'+\
+		'我们很高兴的迎来了SDP的话单功能，这是一个激动人心的时刻，因为这意味着我们可以告别冗杂的日志了\n'+\
+		'1.清空当前的输入框（就是显示的这些文字）\n'+\
+		'2.粘贴话单到输入框中，只支持一行\n'+\
+		'3.在功能的下来菜单中选对应的话单号处理，选错了就解析错了'
 		'其他功能正在努力，请期待……\n'
 		self.textbox.insert(tk.END, usageString + '\r\n')
 		#messagebox.showinfo('使用帮助',usageString)
@@ -288,3 +298,12 @@ class GuiMain(tk.Tk):
 		else:
 			messagebox.showinfo('打开', '没有选择文件')  # 消息提示框
 			pass
+
+	def deal_cdr_29(self,code=''):
+		linestring = self.textbox.get("current linestart", "current lineend+1c")
+		if '|' not in linestring:
+			messagebox.showerror("话单格式错误",'话单格式错误!\n请确认你贴进去的是正确的话单格式！！\n'
+			                              '请 认真阅读帮助第三条！')
+			return
+		result = uag_cdr.cdr_deal_with_code(linestring, code)
+		self.showListToTextBox(result)
