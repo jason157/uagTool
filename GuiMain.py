@@ -92,7 +92,7 @@ class GuiMain(tk.Tk):
 		pass
 
 	def __help_about(self):
-		messagebox.showinfo('关于', '作者：Jason \n verion 0.0.1 \n 感谢您的使用！ ')  # 弹出消息提示框
+		messagebox.showinfo('关于', '作者：Jason \n verion 0.1.0 \n 感谢您的使用！ ')  # 弹出消息提示框
 	def __help_usage(self):
 		usageString='使用帮助:\n一、这是UAG日志分析的小程序\n' +\
 		'首先要在文件->打开中打开uag.log文件(其他包含会议信息的文件也可以）\n' +\
@@ -109,6 +109,7 @@ class GuiMain(tk.Tk):
 		'2.粘贴话单到输入框中，只支持一行\n'+\
 		'3.在功能的下来菜单中选对应的话单号处理，选错了就解析错了'
 		'其他功能正在努力，请期待……\n'
+		self.textbox.delete('1.0', tk.END)  # 先删除所有
 		self.textbox.insert(tk.END, usageString + '\r\n')
 		#messagebox.showinfo('使用帮助',usageString)
 
